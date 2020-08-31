@@ -13,6 +13,7 @@ ssh node-1 << EOF
 pwd
 whoami
 export DATABASE_URI="$DATABASE_URI"
+echo $DATABASE_URI
 export MYSQL_ROOT_PASSWORD="$MYSQL_ROOT_PASSWORD"
 git clone https://github.com/CaelTintreach/SFIA-2-Repair.git
 cd SFIA-2-Repair
@@ -31,3 +32,5 @@ rm -r SFIA-2-Repair
 sudo docker stack services stacktest
 ls
 EOF
+
+echo $DATABASE_URI
