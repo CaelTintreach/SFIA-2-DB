@@ -1,0 +1,82 @@
+version: "3.6"
+services:
+  lgen:
+    build: ./lgen
+    container_name: lgen
+    image: caeltintreach/lgen:latest
+    deploy:
+      mode: replicated
+      replicas: 3
+    ports:
+      - target: 5001
+        published: 5001
+        protocol: tcp
+  ngen:
+    build: ./ngen
+    container_name: ngen
+    image: caeltintreach/ngen:latest
+    deploy:
+      mode: replicated
+      replicas: 3
+    ports:
+      - target: 5002
+        published: 5002
+        protocol: tcp
+  pgen:
+    build: ./pgen
+    container_name: pgen
+    image: caeltintreach/pgen:latest
+    deploy:
+      mode: replicated
+      replicas: 3
+    ports:
+      - target: 5003
+        published: 5003
+        protocol: tcp
+  ui:
+    build: ./ui
+    container_name: ui
+    image: caeltintreach/ui:latest
+    deploy:
+      mode: replicated
+      replicas: 3
+    ports:
+      - target: 5000
+        published: 5000
+        protocol: tcp
+    environment: 
+      DATABASE_URI: ${DATABASE_URI}
+  nginx:
+    container_name: nginx
+    image: nginx
+    depends_on: 
+      - ui
+    ports:
+    - target: 80
+      published: 80
+      protocol: tcp
+    volumes:
+    - type: bind
+      source: ./nginx/nginx.conf
+      target: /etc/nginx/nginx.conf
+    deploy:
+      mode: replicated
+      replicas: 3
+  database:
+    image: mysql:5.7
+    ports:
+      - target: 3306
+        published: 3306
+    environment: 
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: prizedb
+    volumes:
+      - type: volume
+        source: prizedb
+        target: /var/lib/mysql
+
+volumes:
+  prizedb:
+
+#export DATABASE_URI=mysql+pymysql://root:root@database:3306/prizedb
+#export MYSQL_ROOT_PASSWORD=root
