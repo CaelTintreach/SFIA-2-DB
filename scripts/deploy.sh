@@ -1,7 +1,7 @@
 #!/bin/bash
 pwd
 ls
-scp docker-compose.yaml node-1:/home/jenkins/docker-compose.yaml 
+echo "scp docker-compose.yaml node-1:/home/jenkins/docker-compose.yaml"
 
 ssh node-1 << EOF
 git clone https://github.com/CaelTintreach/SFIA-2-DB.git
@@ -16,7 +16,7 @@ echo \$DATABASE_URI
 export MYSQL_ROOT_PASSWORD=$MYSQL_ROOT_PASSWORD
 git clone https://github.com/CaelTintreach/SFIA-2-DB.git
 git pull https://github.com/CaelTintreach/SFIA-2-DB.git
-echo "cd SFIA-2-DB"
+cd SFIA-2-DB
 sudo docker pull caeltintreach/lgen:latest
 sudo docker pull caeltintreach/ui:latest
 sudo docker pull caeltintreach/ngen:latest
